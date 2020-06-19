@@ -85,13 +85,9 @@ def executeInsert(statement='', data=[]):
     try:
         cursor = getCursor()
         psycopg2.extras.execute_values(cursor, statement, data, template=None, page_size=200)
-        # cursor.executemany(statement, data)
-        # conn.commit()
-        # records_list_template = ','.join(['%s'] * len(data))
-        # insert_query =  statement + ' {}'.format(records_list_template)
-        # cursor.execute(insert_query, data)
         cursor.close()
-        print ("Added records {}".format(len(data)))
+        print ("Migrated {} documents to Postgres".format(len(data)))
+        return len(data)
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -99,11 +95,3 @@ def executeInsert(statement='', data=[]):
 
 
 
-# data = [(1,'x'), (2,'y')]
-# insert_query = 'insert into t (a, b) values %s'
-# psycopg2.extras.execute_values (
-#     cursor, insert_query, data, template=None, page_size=100
-# )
-
-#  result = cursor.executemany(sql_insert_query, records)
-#         connection.commit()

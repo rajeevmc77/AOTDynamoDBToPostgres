@@ -14,7 +14,10 @@ def bulkInsertToinserttempcompletedorders(dataRows):
     global totalDocumentsMigrated
     insertColumns = '"' + '","'.join(cfg.mappedColumns['tempcompletedorders']) + '"'
     sql = 'insert into public.tempcompletedorders ({}) values %s'.format(insertColumns)
-    totalDocumentsMigrated = totalDocumentsMigrated + postgresDB.executeInsert(sql,dataRows)
+    print("sending {} documents for insert ".format(len(dataRows)))
+    processedDocumentsCount = postgresDB.executeInsert(sql,dataRows)
+    print("inserted  {} documents  ".format(processedDocumentsCount))
+    totalDocumentsMigrated = totalDocumentsMigrated + processedDocumentsCount
 
 
 def processtempcompletedordersTable(tableName):
@@ -38,9 +41,7 @@ def processtempcompletedordersTable(tableName):
                 insertReadyTuples = []
         bulkInsertToinserttempcompletedorders(insertReadyTuples)
 
-
 if __name__ == '__main__':
-    global totalDocumentsMigrated
     now = datetime.now()
     print(" ----- Data Migration Started   at - {}  ------------".format(now.strftime("%Y-%m-%d %H:%M:%S")))
 

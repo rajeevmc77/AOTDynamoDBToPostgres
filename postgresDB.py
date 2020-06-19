@@ -63,6 +63,14 @@ def getTableColumns(tableName='tempcompletedorders'):
         print(error)
     return columns
 
+def tryConvertDate(dataItem):
+    try:
+        dataItem = datetime.strptime(dataItem, '%Y-%m-%d %H:%M:%S.%f')
+    except:
+        dataItem =None
+    return dataItem
+
+
 def prepareDataForTableInsert(tableName='tempcompletedorders', data= []):
     preparedData = {}
     preparedData['data'] = json.dumps(data)
@@ -73,7 +81,7 @@ def prepareDataForTableInsert(tableName='tempcompletedorders', data= []):
             if dataItem:
                 dataType = [item for item in columns if item[0] == column]
                 if dataType[0][1].startswith('time'):
-                    dataItem = datetime.strptime(dataItem, '%Y-%m-%d %H:%M:%S.%f')
+                    dataItem = tryConvertDate(dataItem)
                 preparedData[column] = dataItem
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -82,16 +90,17 @@ def prepareDataForTableInsert(tableName='tempcompletedorders', data= []):
 def executeInsert(statement='', data=[]):
     global conn
     cursor = None
+    retval = 0
     try:
         cursor = getCursor()
         psycopg2.extras.execute_values(cursor, statement, data, template=None, page_size=200)
         cursor.close()
         print ("Migrated {} documents to Postgres".format(len(data)))
-        return len(data)
-
+        retval = len(data)
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         cursor.close()
+    return retval
 
 
 

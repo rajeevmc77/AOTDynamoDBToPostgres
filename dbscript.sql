@@ -10,9 +10,8 @@ CREATE TABLE public.tempcompletedorders
     "totalPrice" numeric(7,2),
     "orderVia" character varying COLLATE pg_catalog."default",
     "subTotal" numeric(7,2),
-    "orderedDate" timestamp without time zone NOT NULL,
-    data json,
-    CONSTRAINT tempcompletedorders_pkey PRIMARY KEY ("organizationId", "orderNumber","orderedDate")
+    "orderedDate" timestamp without time zone ,
+    data json
 )
 WITH (
     OIDS = FALSE
@@ -20,7 +19,11 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.tempcompletedorders
+	ADD COLUMN id SERIAL PRIMARY KEY;
+
+ALTER TABLE public.tempcompletedorders
     OWNER to postgres;
+	
 
 GRANT INSERT, SELECT ON TABLE public.tempcompletedorders TO appuser;
 

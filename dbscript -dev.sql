@@ -2,7 +2,7 @@
 
 -- DROP TABLE public.tempcompletedorders;
 
-CREATE TABLE public.tempcompletedorders
+CREATE TABLE public.tempcompletedorders_dev
 (
     "organizationId" character varying COLLATE pg_catalog."default" NOT NULL,
     "orderNumber" character varying COLLATE pg_catalog."default" NOT NULL,
@@ -18,13 +18,13 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE public.tempcompletedorders
+ALTER TABLE public.tempcompletedorders_dev
 	ADD COLUMN id SERIAL PRIMARY KEY;
 
-ALTER TABLE public.tempcompletedorders
+ALTER TABLE public.tempcompletedorders_dev
     OWNER to postgres;
 	
 
-GRANT INSERT, SELECT ON TABLE public.tempcompletedorders TO appuser;
+GRANT INSERT, SELECT ON TABLE public.tempcompletedorders_dev TO appuser;
 
-GRANT ALL ON TABLE public.tempcompletedorders TO postgres;
+GRANT ALL ON TABLE public.tempcompletedorders_dev TO postgres;
